@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ol.css">
+    <link rel="stylesheet" href="ol-layerswitcher.css" />
+    <link rel="stylesheet" href="my_map.css">
+    <title>Web Map</title>
+</head>
+<body>
+    
+    <div class="header">
+        <h2> National Railway Network, Canada</h2>
+    </div>
+    <div id="js-map" class="map"></div>
+    <div id="sidebar" class="sidebar">
+        <div id="general_info" class="sidebar_panel side_top">
+            <h2>Layer Information</h2>
+            <p>The National Railway Network (NRWN) is a geometric and attributive description of the Canadian rail network.
+                The dataset was published by the <a href="https://open.canada.ca/data/en/dataset/ac26807e-a1e8-49fa-87bf-451175a859b8/resource/f57bfbee-e8c6-45a9-87a6-fcfb072f5d00">Natural Resources Canada (Geogratis)</a>  <br> 
+                The NRWN layers consist of the features classes: Railway Track Segment, Railway Station, Railway Crossing and Railway Subdivision Name.
+                Descriptive attributes include amongst others: Subdivision Name, Junction Type, Crossing Type, Level of Crossing, Station Name, Station Type, Structure Type.<br>
+                The detailed description about the different layers are presented below:
+                </p>
+        </div>
+        <div id="route_info" class="sidebar_panel side_bottom">
+                <div>
+                    <h3>Railway Track</h3>
+
+                    <button type="button" class="collapsible">Description</button>
+                    <div class="content">
+                      <p>Railway tracks in Canada are an important transportation infrastructure that connects cities and towns across the country. They are used to transport goods and materials, as well as passengers, and are a vital part of the country's economy. There are many different railway companies operating in Canada, including Canadian National Railway and Canadian Pacific Railway. These companies operate both passenger and freight trains, and their tracks can be found in many different parts of the country.
+                        Railway Tracks are Infrastructure including two steel rails which provides a guide for the movement of trains and other equipment.
+                        On this web map page, the tracks are symbolized using solid black lines.
+                        The dataset was published by the <a href="">Natural Resources Canada (Geogractis)</a>
+                        Read more about Railway Tracks in Canada on <a href="https://en.wikipedia.org/wiki/Rail_transport_in_Canada#:~:text=Canada%20has%2049%2C422%20kilometres%20(30%2C709,majority%20of%20its%20railway%20system.">Wikipedia</a>
+                        
+                           </p>
+                </div>
+                <div>
+                    <h3>Railway Stations</h3>
+
+                    <button type="button" class="collapsible">Description</button>
+                    <div class="content">
+                      <p>stations in Canada, ranging from small, rural stations to large, urban ones. Some of the busiest railway stations in the country include Toronto Union Station, Montreal Central Station, and Vancouver Pacific Central Station.
+                        On this web map page, railway stations are shown as green points on a map, with the symbol for each station indicating the type of service it provides (e.g., passenger only, freight only, or both).  The stations could also be used as points of interest in routing or directions, allowing users to plan a trip that includes a train ride as part of their journey.
+                       The dataset was published by the <a href="https://www.nrcan.gc.ca/science-and-data/science-and-research/earth-sciences/geography/topographic-information/10785">Natural Resources Canada (Geogractis)</a>
+                       Read more about Railway Stations in Canada on <a href="https://en.wikipedia.org/wiki/List_of_railway_stations_in_Canada">Wikipedia</a>
+                       </p>
+                    </div>   
+                </div>
+                <div>
+                    <h3>Railway Crossing</h3>
+
+                    <button type="button" class="collapsible">Description</button>
+                    <div class="content">
+                      <p>Railway crossings in Canada are places where a road crosses over or under a railway track. They are an important part of the country's transportation network, allowing vehicles to travel between different areas while also ensuring the safe passage of trains. There are many different types of railway crossings in Canada, including level crossings (where the road and track are at the same elevation), grade separations (where the road and track are on different levels), and pedestrian crossings (where pedestrians and sometimes bicycles can cross the tracks).
+                        On this web map page, railway crossings in Canada are shown as yellow with black 'X' points on the map. The crossings could also be used as points of interest in routing or directions, allowing users to plan a trip that includes crossing a railway track as part of their journey.
+                       The dataset was published by the <a href="https://www.nrcan.gc.ca/science-and-data/science-and-research/earth-sciences/geography/topographic-information/10785">Natural Resources Canada (Geogractis)</a>
+                       
+                       </p>
+                    </div>   
+                </div>
+                <div>
+                    <h3>Railway Subdivision Name</h3>
+
+                    <button type="button" class="collapsible">Description</button>
+                    <div class="content">
+                      <p>Railway subdivisions in Canada are sections of railway track that are identified by a specific name or number. These subdivisions are used to organize and manage the railway system, and they often correspond to specific geographic areas or corridors. For example, a railway subdivision might be named after a nearby city or town, or it might be given a number that corresponds to a particular route or line.
+                        On this web map page, railway subdivisions in Canada are shown with the name or number of each subdivision displayed along the length of the track. The subdivisions could also be used as a reference for routing or directions, allowing users to plan a trip that follows a specific railway line or corridor.
+                       The dataset was published by the <a href="https://www.nrcan.gc.ca/science-and-data/science-and-research/earth-sciences/geography/topographic-information/10785">Natural Resources Canada (Geogractis)</a>
+                       
+                       </p>
+                    </div>   
+                </div>
+        </div>
+    </div>
+    <script src="ol.js"></script>
+    <script src="ol-layerswitcher.js"></script>
+    <script src="my_map.js"></script>
+</body>
+</html>
+
