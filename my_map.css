@@ -82,14 +82,6 @@ overflow: scroll;
     background-color: rgb(52, 53, 53);
 }
   
-  /* Style the collapsible content. Note: hidden by default */
-.content {
-    padding: 0 18px;
-    display: none;
-    overflow: hidden;
-    background-color: #014141;
-}
-
 .collapsible:after {
     content: 'click to read more';
     font-size: 9px;
@@ -108,4 +100,24 @@ overflow: scroll;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
+}
+
+.content[hidden] {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .map {
+        right: 0;
+        bottom: 42%;
+    }
+
+    .sidebar {
+        top: 58%;
+        left: 0;
+        width: 100%;
+        border-top: 5px solid rgb(162, 165, 166);
+        border-left: 0;
+    }
+
 }

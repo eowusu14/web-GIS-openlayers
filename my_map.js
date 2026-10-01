@@ -3,53 +3,54 @@
 // ADDING WMS LAYERS //
 /////////////////////////
 
-// Defining the Railway Track as layer:
-var track = new ol.layer.Image({
-    source: new ol.source.ImageWMS({
-    url:
-    'https://maps.geogratis.gc.ca/wms/railway_en',
-    params: {'LAYERS': 'railway.track'}
-    }),
-    title: 'Railway Track',
-    opacity: 1,
-});
+var railwayWmsUrl = 'https://maps.geogratis.gc.ca/wms/railway_en';
+
+function createRailwayLayer(title, layerName, maxResolution) {
+    return new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+            url: railwayWmsUrl,
+            params: {
+                'LAYERS': layerName,
+                'FORMAT': 'image/png',
+                'TRANSPARENT': true,
+                'VERSION': '1.3.0'
+            }
+        }),
+        title: title,
+        opacity: 1,
+        // Match the display limits advertised by the GeoGratis WMS.
+        maxResolution: maxResolution
+    });
+}
+
+// Track segments have no maximum scale denominator in the WMS capabilities.
+var track = createRailwayLayer('Railway Track', 'railway.track');
 
 
 // Defining Railway Stations as layer:
-var stations = new ol.layer.Image({
-    source: new ol.source.ImageWMS({
-    url:
-    'https://maps.geogratis.gc.ca/wms/railway_en',
-    params: {'LAYERS': 'railway.station'}
-    }),
-    title: 'Railway Stations',
-    opacity: 1
-});
+var stations = createRailwayLayer(
+    'Railway Stations',
+    'railway.station',
+    560 // 1:2,000,000
+);
 
 
 // Defining Railway Crossings
 //////////////////////////
-var crossings = new ol.layer.Image({
-    source: new ol.source.ImageWMS({
-    url:
-    'https://maps.geogratis.gc.ca/wms/railway_en',
-    params: {'LAYERS': 'railway.crossing'}
-    }),
-    title: 'Railway Crossings',
-    opacity: 1
-});
+var crossings = createRailwayLayer(
+    'Railway Crossings',
+    // Keep the control enabled at every zoom. The WMS applies its own
+    // 1:20,000 display threshold and returns crossing symbols when zoomed in.
+    'railway.crossing'
+);
 
 
 // Defining Railway Subdivision Name 
-var division_name = new ol.layer.Image({
-    source: new ol.source.ImageWMS({
-    url:
-    'https://maps.geogratis.gc.ca/wms/railway_en',
-    params: {'LAYERS': 'railway.subdivision'}
-    }),
-    title: 'Railway Subdivision Name',
-    opacity: 1
-});
+var divisionName = createRailwayLayer(
+    'Railway Subdivision Name',
+    'railway.subdivision',
+    700 // 1:2,500,000
+);
 
  
 // ////////////////////////
@@ -70,13 +71,14 @@ var cbmtSource = new ol.source.TileWMS({
 var cbmt = new ol.layer.Tile({
     title: 'Canada Base Map – Transportation',
     type: 'base',
+    visible: false,
     source: cbmtSource
 });
 
 
 //Defining DEM as a source of tiles
 var reliefSource = new ol.source.TileWMS({
-    url: 'http://maps.geogratis.gc.ca/wms/elevation_en',
+    url: 'https://maps.geogratis.gc.ca/wms/elevation_en',
     params: {
     LAYERS: 'cdem.color-shaded-relief'},
     attributions: [new ol.Attribution({html: "The Canadian Digital Elevation Model (CDEM) <br> is part of Natural Resources Canada altimetry<br> system designed to better meet the users'<br> needs for elevation data and products.<br> In this data, elevations can be either ground <br> or reflective surface elevations. <br> <a href=https://open.canada.ca/data/en/dataset/7f245e4d-76c2-4caa-951a-45d1d2051333>Canadian Digital Elevation Model</a>"})]
@@ -86,6 +88,7 @@ var reliefSource = new ol.source.TileWMS({
 var relief = new ol.layer.Tile({
     title: 'Digital Elevation Model',
     type: 'base',
+    visible: false,
     source: reliefSource
 });
 
@@ -97,7 +100,8 @@ var osmTiles = new ol.source.OSM();
 var osmBase = new ol.layer.Tile({
     source: osmTiles,
     title: 'Modern',
-    type: 'base'
+    type: 'base',
+    visible: true
 });
 // ///////////////////
 // CREATING THE MAP //
@@ -105,7 +109,7 @@ var osmBase = new ol.layer.Tile({
 
 // Define an overview map as a control:
 var overviewMapControl = new ol.control.OverviewMap({
-    layers: [cbmt, relief, osmBase],
+    layers: [new ol.layer.Tile({source: new ol.source.OSM()})],
     collapsed: false
 });
 
@@ -113,9 +117,11 @@ var overviewMapControl = new ol.control.OverviewMap({
 var map = new ol.Map({
     controls: ol.control.defaults().extend([overviewMapControl]),
     view: new ol.View({
-    center: [-12227139, 7372882],
-    zoom: 5 }),
-    layers: [relief, cbmt, osmBase, division_name, crossings, stations, track, ],
+    // Start close enough for stations and subdivision labels to render.
+    center: ol.proj.fromLonLat([-113.4909, 53.5461]),
+    zoom: 9 }),
+    // Lines go below point and label overlays so they cannot obscure them.
+    layers: [relief, cbmt, osmBase, track, divisionName, stations, crossings],
     target: 'js-map'
 });
 
@@ -125,40 +131,18 @@ var layerSwitcher = new ol.control.LayerSwitcher({
 });
 map.addControl(layerSwitcher);
 
-// map.addLayer(garbage)
-
-
 ////////////////////////
 //Collapsible button in side panel
-var coll = document.getElementsByClassName("collapsible");
+var coll = document.getElementsByClassName('collapsible');
 var i;
 
 for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
+  coll[i].addEventListener('click', function() {
+    var expanded = this.getAttribute('aria-expanded') === 'true';
+    this.classList.toggle('active', !expanded);
+    this.setAttribute('aria-expanded', String(!expanded));
     var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
+    content.hidden = expanded;
+    content.style.maxHeight = expanded ? null : content.scrollHeight + 'px';
   });
 }
-
-
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.maxHeight){
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } 
-  });
-}
-
-
