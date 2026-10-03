@@ -33,14 +33,6 @@ python3 -m http.server 8008
 
 Open [http://localhost:8008](http://localhost:8008) in a browser.
 
-## Project files
-
-- `index.html` — page structure and layer information
-- `my_map.js` — map configuration, WMS layers, controls, and interactions
-- `my_map.css` — application layout and responsive styling
-- `ol.js` and `ol.css` — vendored OpenLayers assets
-- `ol-layerswitcher.js` and `ol-layerswitcher.css` — layer switcher control
-
 ## Deployment
 
 The site is deployed as a static Vercel project from the repository root. No build command or environment variables are required.
